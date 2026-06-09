@@ -92,10 +92,20 @@ export default function PublishGuide({ isOpen, onClose }: PublishGuideProps) {
               <div className="p-4 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700">
                 <h4 className="font-bold text-slate-800 dark:text-white mb-2 flex items-center gap-2">
                   <span className="w-6 h-6 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-600 font-mono text-xs flex items-center justify-center">২</span>
-                  Vercel বা Cloud Run এ হোস্টিং
+                  GitHub Pages-এ পাবলিশ করা (বিনামূল্যে)
                 </h4>
                 <p className="text-xs">
-                  আপনার কোডটি GitHub-এ পুশ করুন। এরপর Vercel.com-এ একাউন্ট খুলে সরাসরি GitHub রিপোজিটরি ইম্পোর্ট করুন। Framework Preset হিসেবে "Vite" সিলেক্ট করে Deploy-এ ক্লিক করুন।
+                  আপনার রিপোজিটরি (যেমন: `Jantrik`) GitHub-এ পুশ করুন। এরপর GitHub Actions ব্যবহার করে অথবা লোকাল পিসিতে <code>npm run build</code> কমান্ড চালিয়ে <code>dist</code> ফোল্ডারটি <code>gh-pages</code> ব্রাঞ্চে পুশ করুন। Settings > Pages এ গিয়ে সোর্স হিসেবে gh-pages ব্রাঞ্চ সিলেক্ট করে সেভ করুন।
+                </p>
+              </div>
+
+              <div className="p-4 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700">
+                <h4 className="font-bold text-slate-800 dark:text-white mb-2 flex items-center gap-2">
+                  <span className="w-6 h-6 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-600 font-mono text-xs flex items-center justify-center">৩</span>
+                  Vercel বা Cloud Run এ হোস্টিং (প্রফেশনাল)
+                </h4>
+                <p className="text-xs">
+                  Vercel.com-এ একাউন্ট খুলে সরাসরি GitHub রিপোজিটরি ইম্পোর্ট করুন। Framework Preset হিসেবে "Vite" সিলেক্ট করে Deploy-এ ক্লিক করুন।
                 </p>
               </div>
 
