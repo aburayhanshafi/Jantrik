@@ -1,0 +1,6 @@
+{
+  "name": "JantrikGhuri",
+  "description": "On-demand vehicle and home appliance repair service available at remote locations and late night hours.",
+  "requestFramePermissions": ["geolocation", "microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
