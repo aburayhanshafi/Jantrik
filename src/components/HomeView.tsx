@@ -9,9 +9,9 @@ import { ServiceCategory } from "../types";
 import { Car, Keyboard, ShieldAlert, Zap, ThermometerSnowflake, Compass, Phone, MoonStar, MapPin } from "lucide-react";
 import { useAppContext } from "../context/AppContext";
 
-const carBanner = "/src/assets/images/car_service_banner_1781015724259.png";
-const bikeBanner = "/src/assets/images/bike_service_banner_1781015738289.png";
-const buildingBanner = "/src/assets/images/building_service_banner_1781015754784.png";
+import carBanner from "../assets/images/car_service_banner_1781015724259.png";
+import bikeBanner from "../assets/images/bike_service_banner_1781015738289.png";
+import buildingBanner from "../assets/images/building_service_banner_1781015754784.png";
 
 interface HomeViewProps {
   onSelectCategory: (category: ServiceCategory, initialDetail?: string) => void;

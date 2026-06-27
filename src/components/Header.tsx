@@ -10,7 +10,7 @@ import AuthModal from "./AuthModal";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
 
-import logoImg from "../assets/images/gantrikghuri_logo_1781015708519.png";
+import logoImg from "../assets/images/Jantrik_logo.png";
 
 interface HeaderProps {
   isAdminMode: boolean;
