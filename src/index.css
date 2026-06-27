@@ -1,1 +1,19 @@
 @import "tailwindcss";
+
+@layer utilities {
+  .pulse-whatsapp {
+    animation: pulse-whatsapp 2s infinite;
+  }
+}
+
+@keyframes pulse-whatsapp {
+  0% {
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 15px rgba(37, 211, 102, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+  }
+}

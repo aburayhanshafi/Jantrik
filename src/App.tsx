@@ -123,12 +123,23 @@ export default function App() {
               </>
             )}
             <span className="hidden sm:inline-block">•</span>
-            <a href="tel:09612" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
-              {language === "bn" ? "হেল্পলাইন সাপোর্ট" : "Helpline"}
+            <a href="tel:+8801581881805" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors flex items-center gap-1">
+              <Phone className="w-3 h-3" /> {language === "bn" ? "হেল্পলাইন: +৮৮০ ১৫৮১-৮৮১৮০৫" : "Helpline: +880 1581-881805"}
             </a>
           </div>
         </div>
       </footer>
+
+      {/* Floating WhatsApp Button */}
+      <a
+        href="https://wa.me/8801581881805"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="fixed bottom-6 right-6 z-50 w-14 h-14 bg-[#25D366] text-white rounded-full flex items-center justify-center shadow-[0_4px_14px_0_rgba(37,211,102,0.39)] hover:scale-110 transition-transform hover:shadow-[0_6px_20px_rgba(37,211,102,0.23)] pulse-whatsapp"
+        title="Chat with us on WhatsApp"
+      >
+        <MessageSquare className="w-6 h-6" />
+      </a>
 
       {/* Publish Guide Modal */}
       <PublishGuide isOpen={publishGuideOpen} onClose={() => setPublishGuideOpen(false)} />
