@@ -95,7 +95,7 @@ export default function PublishGuide({ isOpen, onClose }: PublishGuideProps) {
                   GitHub Pages-এ পাবলিশ করা (বিনামূল্যে)
                 </h4>
                 <p className="text-xs">
-                  আপনার রিপোজিটরি (যেমন: `Jantrik`) GitHub-এ পুশ করুন। এরপর GitHub Actions ব্যবহার করে অথবা লোকাল পিসিতে <code>npm run build</code> কমান্ড চালিয়ে <code>dist</code> ফোল্ডারটি <code>gh-pages</code> ব্রাঞ্চে পুশ করুন। Settings > Pages এ গিয়ে সোর্স হিসেবে gh-pages ব্রাঞ্চ সিলেক্ট করে সেভ করুন।
+                  আপনার রিপোজিটরি (যেমন: `Jantrik`) GitHub-এ পুশ করুন। এরপর GitHub Actions ব্যবহার করে অথবা লোকাল পিসিতে <code>npm run build</code> কমান্ড চালিয়ে <code>dist</code> ফোল্ডারটি <code>gh-pages</code> ব্রাঞ্চে পুশ করুন। Settings &gt; Pages এ গিয়ে সোর্স হিসেবে gh-pages ব্রাঞ্চ সিলেক্ট করে সেভ করুন।
                 </p>
               </div>
 
