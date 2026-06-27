@@ -3,8 +3,7 @@
 </div>
 
 # Run and deploy your AI Studio app
-
-This contains everything you need to run your app
+x5frthing you need to run your app
 ## Run Locally
 
 **Prerequisites:**  Node.js
