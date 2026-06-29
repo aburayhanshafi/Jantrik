@@ -13,7 +13,7 @@ import PublishGuide from "./components/PublishGuide";
 import { ServiceCategory, Ticket } from "./types";
 import { CheckCircle, ShieldCheck, Sparkles, MapPin, Phone, MessageSquare, BookOpen } from "lucide-react";
 import { useAppContext } from "./context/AppContext";
-
+import AnimatedBackground from "./components/AnimatedBackground";
 export default function App() {
   const { user, isAdmin, language } = useAppContext();
   const [isAdminMode, setIsAdminMode] = useState(false);
@@ -45,7 +45,8 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50/50 dark:bg-black transition-colors duration-300 flex flex-col font-sans text-slate-800 dark:text-slate-200" id="main_app_wrapper">
+    <div className="min-h-screen bg-transparent transition-colors duration-300 flex flex-col font-sans text-slate-800 dark:text-slate-200" id="main_app_wrapper">
+      <AnimatedBackground />
       <Header 
         isAdminMode={isAdminMode} 
         onToggleAdmin={(admin) => {
