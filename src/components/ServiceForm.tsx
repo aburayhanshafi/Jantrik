@@ -8,7 +8,8 @@ import { motion } from "motion/react";
 import { ServiceCategory, Ticket } from "../types";
 import { 
   ArrowLeft, Phone, User, MapPin, Mic, MicOff, 
-  Sparkles, CheckCircle2, Loader2, RefreshCw 
+  Sparkles, CheckCircle2, Loader2, RefreshCw,
+  Camera, Upload, X
 } from "lucide-react";
 import { useAppContext } from "../context/AppContext";
 
@@ -17,6 +18,13 @@ interface ServiceFormProps {
   initialSubCategory?: string;
   onBack: () => void;
   onSubmitSuccess: (ticket: Ticket) => void;
+}
+
+interface UploadedFile {
+  id: string;
+  file: File;
+  blobUrl: string;
+  type: "image" | "video";
 }
 
 export default function ServiceForm({ category, initialSubCategory, onBack, onSubmitSuccess }: ServiceFormProps) {
@@ -47,6 +55,10 @@ export default function ServiceForm({ category, initialSubCategory, onBack, onSu
   const [voiceTranscript, setVoiceTranscript] = useState("");
   const [recordingSeconds, setRecordingSeconds] = useState(0);
 
+  // File Upload states
+  const [files, setFiles] = useState<UploadedFile[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   // STT Recognition state
   const [isListeningSpeech, setIsListeningSpeech] = useState(false);
 
@@ -74,6 +86,9 @@ export default function ServiceForm({ category, initialSubCategory, onBack, onSu
     location: language === "bn" ? "লাইভ জিপিএস লোকেশন" : "Live GPS Location",
     refreshLoc: language === "bn" ? "রি-ট্র্যাক জিপিএস" : "Refresh Loc",
     addressPlaceholder: language === "bn" ? "হাউস, রোড বা ল্যান্ডমার্ক" : "House, Road, or Landmark",
+    uploadLabel: language === "bn" ? "ছবি / ভিডিও আপলোড (ঐচ্ছিক)" : "Photo / Video Upload (Optional)",
+    uploadText: language === "bn" ? "ছবি বা ভিডিও আপলোড করুন" : "Upload photos or videos",
+    uploadHint: language === "bn" ? "ক্লিক করুন বা ফাইল ড্রপ করুন" : "Click or drop files here",
     submit: language === "bn" ? "সার্ভিস বুক করুন" : "Submit Service Request"
   };
 
@@ -90,6 +105,27 @@ export default function ServiceForm({ category, initialSubCategory, onBack, onSu
     }
     return () => { if (timerRef.current) clearInterval(timerRef.current); };
   }, [isRecording]);
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFiles = e.target.files;
+    if (!selectedFiles) return;
+    const newFiles: UploadedFile[] = Array.from(selectedFiles).map((file) => ({
+      id: crypto.randomUUID(),
+      file,
+      blobUrl: URL.createObjectURL(file),
+      type: file.type.startsWith("image/") ? "image" : "video",
+    }));
+    setFiles((prev) => [...prev, ...newFiles]);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
+  const removeFile = (id: string) => {
+    setFiles((prev) => {
+      const target = prev.find((f) => f.id === id);
+      if (target) URL.revokeObjectURL(target.blobUrl);
+      return prev.filter((f) => f.id !== id);
+    });
+  };
 
   const fetchLocation = () => {
     setGpsStatus("getting");
@@ -236,6 +272,7 @@ export default function ServiceForm({ category, initialSubCategory, onBack, onSu
         location: { latitude, longitude, address: address.trim() || "No Address" },
         voiceUrl: audioUrl || null,
         voiceText: voiceTranscript || null,
+        mediaUrls: files.map(f => f.blobUrl),
         aiDiagnosis: aiResult
       };
 
@@ -311,8 +348,41 @@ export default function ServiceForm({ category, initialSubCategory, onBack, onSu
           </div>
 
           <div className="p-4 rounded-2xl bg-indigo-50/50 dark:bg-indigo-900/10 border border-indigo-100 dark:border-indigo-800/50 space-y-3">
-            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 text-xs">
-              <label className="font-bold flex items-center gap-1 text-indigo-900 dark:text-indigo-300"><MapPin className="w-4 h-4 text-rose-500"/> {t.location}</label>
+             <div className="flex justify-between items-center text-xs font-bold text-slate-800 dark:text-slate-200">
+                <div className="flex items-center gap-2"><Camera className="w-4 h-4 text-indigo-500"/> {t.uploadLabel}</div>
+             </div>
+             
+             <div onClick={() => fileInputRef.current?.click()} className="cursor-pointer rounded-xl border-2 border-dashed border-slate-300 dark:border-slate-600 bg-white/50 dark:bg-slate-800/30 px-4 py-6 text-center transition-all hover:border-indigo-400 hover:bg-indigo-50/50 dark:hover:border-indigo-500 dark:hover:bg-indigo-900/30">
+                <Upload className="mx-auto h-6 w-6 text-slate-400" />
+                <p className="mt-2 text-xs font-medium text-slate-600 dark:text-slate-300">{t.uploadText}</p>
+                <p className="mt-1 text-[10px] text-slate-400">{t.uploadHint}</p>
+             </div>
+             <input ref={fileInputRef} type="file" accept="image/*,video/*" multiple onChange={handleFileSelect} className="hidden" />
+
+             {files.length > 0 && (
+               <div className="flex flex-wrap gap-2 mt-2">
+                 {files.map((f) => (
+                   <div key={f.id} className="group relative overflow-hidden rounded-lg border border-slate-200 bg-slate-100 dark:border-slate-700 dark:bg-slate-800">
+                     {f.type === "image" ? (
+                       <img src={f.blobUrl} alt={f.file.name} className="h-16 w-16 object-cover" />
+                     ) : (
+                       <div className="flex h-16 w-20 flex-col items-center justify-center px-1">
+                         <Camera className="h-4 w-4 text-slate-400" />
+                         <p className="mt-1 max-w-full truncate text-[9px] text-slate-500 dark:text-slate-400">{f.file.name}</p>
+                       </div>
+                     )}
+                     <button type="button" onClick={(e) => { e.stopPropagation(); removeFile(f.id); }} className="absolute right-1 top-1 rounded-full bg-rose-500/90 p-0.5 text-white opacity-0 shadow transition-opacity group-hover:opacity-100">
+                       <X className="h-3 w-3" />
+                     </button>
+                   </div>
+                 ))}
+               </div>
+             )}
+           </div>
+
+          <div className="p-4 rounded-2xl bg-emerald-50/50 dark:bg-emerald-900/10 border border-emerald-100 dark:border-emerald-800/50 space-y-3">
+             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 text-xs">
+              <label className="font-bold flex items-center gap-1 text-emerald-900 dark:text-emerald-300"><MapPin className="w-4 h-4 text-rose-500"/> {t.location}</label>
               <button type="button" onClick={fetchLocation} className="text-[10px] font-bold px-2 py-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded text-slate-600 dark:text-slate-300 flex items-center gap-1"><RefreshCw className={`w-3 h-3 ${gpsStatus==='getting'?'animate-spin':''}`}/> {t.refreshLoc}</button>
             </div>
             <input required type="text" value={address} onChange={e => setAddress(e.target.value)} placeholder={t.addressPlaceholder} className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-white" />

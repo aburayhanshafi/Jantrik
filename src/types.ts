@@ -27,6 +27,7 @@ export interface Ticket {
   problemDescription: string;
   voiceUrl?: string; // base64 or mock file path
   voiceText?: string; // Gemini transcript if voice submitted
+  mediaUrls?: string[]; // Blob URLs for uploaded photos/videos
   status: "pending" | "assigned" | "completed" | "cancelled";
   createdAt: string;
   phoneNumber: string;
