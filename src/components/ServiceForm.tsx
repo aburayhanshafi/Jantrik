@@ -13,13 +13,13 @@ import {
 } from "lucide-react";
 import { useAppContext } from "../context/AppContext";
 
-import carDiagram from "../assets/car_diagram.jpg";
-import bikeDiagram from "../assets/bike_diagram.jpg";
-import acDiagram from "../assets/ac_diagram.jpg";
-import electricDiagram from "../assets/generator_diagram.jpg";
-import plumberDiagram from "../assets/plumber_diagram.jpg";
-import applianceDiagram from "../assets/home_appliance_diagram.jpg";
-import liftDiagram from "../assets/lift_diagram.jpg";
+import carDiagram from "../assets/images/1783523701981.png";
+import bikeDiagram from "../assets/images/1783523679639.png";
+import acDiagram from "../assets/images/1783523652215.png";
+import electricDiagram from "../assets/images/1783524048668.png";
+import plumberDiagram from "../assets/images/1783523926859.png";
+import applianceDiagram from "../assets/images/1783524833794.png";
+import liftDiagram from "../assets/images/Jantrik_logo.png";
 
 interface ServiceFormProps {
   category: ServiceCategory;

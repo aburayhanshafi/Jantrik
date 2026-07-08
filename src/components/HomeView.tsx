@@ -18,13 +18,13 @@ import {
 import { useAppContext } from "../context/AppContext";
 import ContactFormModal from "./ContactFormModal";
 
-import carBanner from "../assets/car_diagram.jpg";
-import bikeBanner from "../assets/bike_diagram.jpg";
-import acBanner from "../assets/ac_diagram.jpg";
-import generatorBanner from "../assets/generator_diagram.jpg";
-import plumberBanner from "../assets/plumber_diagram.jpg";
-import electricianBanner from "../assets/home_appliance_diagram.jpg";
-import otherBanner from "../assets/lift_diagram.jpg";
+import carBanner from "../assets/images/1783523701981.png";
+import bikeBanner from "../assets/images/1783523679639.png";
+import acBanner from "../assets/images/1783523652215.png";
+import generatorBanner from "../assets/images/1783524048668.png";
+import plumberBanner from "../assets/images/1783523926859.png";
+import electricianBanner from "../assets/images/1783524833794.png";
+import otherBanner from "../assets/images/Jantrik_logo.png";
 
 const HELPLINE = "+8801581881805";
 const WHATSAPP_URL = `https://wa.me/8801581881805`;
