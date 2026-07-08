@@ -1,462 +1,235 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
-
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { CheckCircle, Phone, Wrench, AlertCircle, ArrowLeft } from "lucide-react";
+import { User, Phone, IdCard, Calendar, CheckCircle2, Loader2, Wrench, Sparkles, AlertCircle } from "lucide-react";
 import { useAppContext } from "../context/AppContext";
+import serviceDiagram from "../assets/service_diagram.jpg";
 
-interface TechnicianFormData {
-  fullName: string;
-  phoneNumber: string;
-  nidNumber: string;
-  membershipDuration: string;
-}
-
-interface TechnicianRegistration extends TechnicianFormData {
-  id: string;
-  registeredAt: string;
-}
-
-interface TechnicianAppProps {
-  onBack: () => void;
-}
-
-export default function TechnicianApp({ onBack }: TechnicianAppProps) {
+export default function TechnicianApp() {
   const { language } = useAppContext();
-  const [formData, setFormData] = useState<TechnicianFormData>({
-    fullName: "",
-    phoneNumber: "",
-    nidNumber: "",
-    membershipDuration: "3_months",
-  });
-
-  const [registeredTechnician, setRegisteredTechnician] =
-    useState<TechnicianRegistration | null>(null);
-  const [errors, setErrors] = useState<Partial<TechnicianFormData>>({});
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [voterId, setVoterId] = useState("");
+  const [membership, setMembership] = useState("3_months");
+  const [customMembership, setCustomMembership] = useState("");
+  
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [error, setError] = useState("");
 
   const t = {
-    technicianPortal:
-      language === "bn" ? "টেকনিশিয়ান পোর্টাল" : "Technician Portal",
-    technicianRegistration:
-      language === "bn"
-        ? "টেকনিশিয়ান নিবন্ধন ফর্ম"
-        : "Technician Registration",
-    subtitle:
-      language === "bn"
-        ? "যান্ত্রিকঘুড়ি নেটওয়ার্কে যোগ দিন এবং আপনার সেবা প্রদান করুন"
-        : "Join JantrikGhuri Network and Provide Services",
-    fullName: language === "bn" ? "সম্পূর্ণ নাম" : "Full Name",
-    fullNamePlaceholder:
-      language === "bn" ? "আপনার সম্পূর্ণ নাম প্রবেশ করুন" : "Enter your full name",
-    phoneNumber: language === "bn" ? "মোবাইল নম্বর" : "Phone Number",
-    phoneNumberPlaceholder:
-      language === "bn"
-        ? "+880 1XXX-XXXXXX"
-        : "+880 1XXX-XXXXXX",
-    nidNumber:
-      language === "bn"
-        ? "জাতীয় পরিচয় পত্র / ভোটার আইডি"
-        : "National ID / Voter ID",
-    nidPlaceholder:
-      language === "bn"
-        ? "আপনার আইডি নম্বর প্রবেশ করুন"
-        : "Enter your ID number",
-    membershipDuration:
-      language === "bn"
-        ? "সদস্যপদ সময়কাল"
-        : "Membership Duration",
-    threeMonths: language === "bn" ? "৩ মাস" : "3 Months",
-    sixMonths: language === "bn" ? "৬ মাস" : "6 Months",
-    twoYears: language === "bn" ? "২ বছর" : "2 Years",
-    custom: language === "bn" ? "কাস্টম সময়কাল" : "Custom Period",
-    register:
-      language === "bn" ? "টেকনিশিয়ান হিসেবে নিবন্ধন করুন" : "Register as Technician",
-    backToCustomer:
-      language === "bn" ? "কাস্টমার পোর্টালে ফিরুন" : "Back to Customer Portal",
-    successTitle:
-      language === "bn"
-        ? "নিবন্ধন সফলভাবে সম্পন্ন হয়েছে!"
-        : "Registration Successful!",
-    registrationId:
-      language === "bn" ? "নিবন্ধন আইডি:" : "Registration ID:",
-    registeredAt:
-      language === "bn" ? "নিবন্ধিত সময়:" : "Registered At:",
-    successMessage:
-      language === "bn"
-        ? "আপনার তথ্য যান্ত্রিকঘুড়ি সিস্টেমে সফলভাবে রেকর্ড করা হয়েছে। আমাদের টিম শীঘ্রই আপনার সাথে যোগাযোগ করবে।"
-        : "Your information has been successfully recorded in JantrikGhuri system. Our team will contact you soon.",
-    close: language === "bn" ? "বন্ধ করুন" : "Close",
-    required:
-      language === "bn" ? "এটি একটি প্রয়োজনীয় ক্ষেত্র" : "This field is required",
-    invalidPhone:
-      language === "bn"
-        ? "অনুগ্রহ করে একটি বৈধ ফোন নম্বর প্রবেশ করুন"
-        : "Please enter a valid phone number",
-    invalidNID:
-      language === "bn"
-        ? "অনুগ্রহ করে একটি বৈধ আইডি নম্বর প্রবেশ করুন"
-        : "Please enter a valid ID number",
+    title: language === "bn" ? "টেকনিশিয়ান অনবোর্ডিং পোর্টাল" : "Technician Onboarding Portal",
+    subtitle: language === "bn" ? "যান্ত্রিকঘুড়ি নেটওয়ার্কে যুক্ত হয়ে নিজের আয় বৃদ্ধি করুন!" : "Join JantrikGhuri network and grow your income!",
+    nameLabel: language === "bn" ? "পূর্ণ নাম" : "Full Name",
+    phoneLabel: language === "bn" ? "মোবাইল নম্বর" : "Phone Number",
+    voterIdLabel: language === "bn" ? "ভোটার আইডি কার্ড (NID) নম্বর" : "Voter ID (NID) Number",
+    membershipLabel: language === "bn" ? "মেম্বারশিপ মেয়াদ" : "Membership Duration",
+    opt3m: language === "bn" ? "৩ মাস" : "3 Months",
+    opt6m: language === "bn" ? "৬ মাস" : "6 Months",
+    opt2y: language === "bn" ? "২ বছর" : "2 Years",
+    optCustom: language === "bn" ? "কাস্টম (মাস)" : "Custom (Months)",
+    customPlaceholder: language === "bn" ? "কত মাসের জন্য?" : "How many months?",
+    submit: language === "bn" ? "রেজিস্ট্রেশন সম্পূর্ণ করুন" : "Complete Registration",
+    successTitle: language === "bn" ? "রেজিস্ট্রেশন সফল হয়েছে!" : "Registration Successful!",
+    successMsg: language === "bn" ? "যান্ত্রিকঘুড়ি টেকনিশিয়ান পোর্টালে আপনার আবেদনটি গৃহীত হয়েছে। আমাদের টিম খুব দ্রুত আপনার সাথে যোগাযোগ করে একাউন্ট ভেরিফাই করবে।" : "Your application has been received. Our team will contact you shortly for verification.",
+    newReg: language === "bn" ? "নতুন রেজিস্ট্রেশন করুন" : "New Registration"
   };
 
-  const validateForm = (): boolean => {
-    const newErrors: Partial<TechnicianFormData> = {};
-
-    if (!formData.fullName.trim()) {
-      newErrors.fullName = t.required;
-    }
-
-    if (!formData.phoneNumber.trim()) {
-      newErrors.phoneNumber = t.required;
-    } else if (!/^(\+880|88|0)?1[3-9]\d{8}$/.test(formData.phoneNumber.replace(/\D/g, ""))) {
-      newErrors.phoneNumber = t.invalidPhone;
-    }
-
-    if (!formData.nidNumber.trim()) {
-      newErrors.nidNumber = t.required;
-    } else if (formData.nidNumber.trim().length < 10) {
-      newErrors.nidNumber = t.invalidNID;
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (!validateForm()) {
+    if (!name || !phone || !voterId) {
+      setError(language === "bn" ? "দয়া করে সকল তথ্য সঠিকভাবে দিন।" : "Please fill in all required fields.");
       return;
     }
 
+    if (membership === "custom" && !customMembership) {
+      setError(language === "bn" ? "দয়া করে কাস্টম মেয়াদ উল্লেখ করুন।" : "Please specify custom duration.");
+      return;
+    }
+
+    setError("");
     setIsSubmitting(true);
-
-    // Simulate API call with delay (prototype behavior)
-    await new Promise((resolve) => setTimeout(resolve, 800));
-
-    const registration: TechnicianRegistration = {
-      ...formData,
-      id: `TECH-${Date.now()}`,
-      registeredAt: new Date().toLocaleString(
-        language === "bn" ? "bn-BD" : "en-US"
-      ),
-    };
-
-    // Store in local state (prototype mode)
-    setRegisteredTechnician(registration);
-    setIsSubmitting(false);
-
-    // Reset form
-    setFormData({
-      fullName: "",
-      phoneNumber: "",
-      nidNumber: "",
-      membershipDuration: "3_months",
-    });
+    
+    // Simulate API call
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setIsSuccess(true);
+    }, 1500);
   };
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-    // Clear error for this field when user starts typing
-    if (errors[name as keyof TechnicianFormData]) {
-      setErrors((prev) => ({
-        ...prev,
-        [name]: undefined,
-      }));
-    }
+  const resetForm = () => {
+    setName("");
+    setPhone("");
+    setVoterId("");
+    setMembership("3_months");
+    setCustomMembership("");
+    setIsSuccess(false);
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 pt-6 pb-12 px-4">
-      <div className="max-w-3xl mx-auto">
-        {/* Header Section */}
-        <div className="mb-8">
-          <button
-            onClick={onBack}
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors text-sm font-semibold mb-6"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            {t.backToCustomer}
-          </button>
-
-          <div className="flex items-center gap-4 mb-4">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center text-white shadow-lg">
-              <Wrench className="w-6 h-6" />
-            </div>
-            <div>
-              <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white">
-                {t.technicianPortal}
-              </h1>
-              <p className="text-slate-600 dark:text-slate-400 text-sm md:text-base mt-1">
-                {t.subtitle}
-              </p>
-            </div>
+    <div className="max-w-2xl mx-auto px-4 py-8">
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.98, y: 10 }} 
+        animate={{ opacity: 1, scale: 1, y: 0 }} 
+        className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden"
+      >
+        <div className="bg-gradient-to-r from-orange-500 via-amber-500 to-amber-600 text-white p-8 relative overflow-hidden">
+          <Wrench className="absolute right-[-10px] top-[-10px] opacity-10 w-40 h-40 transform rotate-12" />
+          <Sparkles className="absolute right-8 top-8 opacity-20 w-8 h-8" />
+          <div className="relative z-10">
+            <span className="inline-block px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-xs font-bold mb-3 border border-white/30 text-amber-50">
+              {language === "bn" ? "টেকনিশিয়ান অ্যাপ" : "Technician App"}
+            </span>
+            <h3 className="text-2xl md:text-3xl font-extrabold font-sans mb-1">
+              {t.title}
+            </h3>
+            <p className="text-sm text-amber-100 font-medium">{t.subtitle}</p>
           </div>
         </div>
 
         <AnimatePresence mode="wait">
-          {registeredTechnician ? (
-            // Success Screen
-            <motion.div
+          {isSuccess ? (
+            <motion.div 
               key="success"
-              initial={{ opacity: 0, scale: 0.95 }}
+              initial={{ opacity: 0, scale: 0.9 }} 
               animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="bg-white dark:bg-slate-800 rounded-3xl shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-700"
+              exit={{ opacity: 0 }}
+              className="p-10 text-center flex flex-col items-center"
             >
-              {/* Success Header */}
-              <div className="bg-gradient-to-r from-emerald-500 to-teal-600 p-8 text-white text-center">
-                <div className="mx-auto w-20 h-20 rounded-full bg-white/20 flex items-center justify-center mb-4">
-                  <CheckCircle className="w-12 h-12 text-white" />
+              <div className="w-20 h-20 bg-emerald-100 dark:bg-emerald-900/30 rounded-full flex items-center justify-center mb-6">
+                <CheckCircle2 className="w-10 h-10 text-emerald-500 dark:text-emerald-400" />
+              </div>
+              <h4 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-3">{t.successTitle}</h4>
+              <p className="text-slate-500 dark:text-slate-400 max-w-md mx-auto leading-relaxed mb-8">
+                {t.successMsg}
+              </p>
+              
+              <div className="bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-4 w-full max-w-sm mb-8 border border-slate-100 dark:border-slate-700/50">
+                <div className="flex justify-between items-center text-xs mb-2 pb-2 border-b border-slate-200 dark:border-slate-700">
+                  <span className="text-slate-500">{t.nameLabel}:</span>
+                  <span className="font-bold text-slate-800 dark:text-slate-200">{name}</span>
                 </div>
-                <h2 className="text-2xl md:text-3xl font-bold">
-                  {t.successTitle}
-                </h2>
-                <p className="text-emerald-100 text-sm mt-2 font-mono">
-                  {t.registrationId}{" "}
-                  <strong className="bg-emerald-700/30 px-2.5 py-1 rounded text-white ml-2">
-                    {registeredTechnician.id}
-                  </strong>
-                </p>
+                <div className="flex justify-between items-center text-xs mb-2 pb-2 border-b border-slate-200 dark:border-slate-700">
+                  <span className="text-slate-500">{t.phoneLabel}:</span>
+                  <span className="font-bold text-slate-800 dark:text-slate-200">{phone}</span>
+                </div>
+                <div className="flex justify-between items-center text-xs">
+                  <span className="text-slate-500">{t.membershipLabel}:</span>
+                  <span className="font-bold text-amber-600 dark:text-amber-500">
+                    {membership === "custom" ? `${customMembership} ${language === "bn" ? "মাস" : "Months"}` : membership.replace("_", " ")}
+                  </span>
+                </div>
               </div>
 
-              {/* Success Content */}
-              <div className="p-8 space-y-6">
-                {/* Registration Details */}
-                <div className="space-y-4">
-                  <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-                    {language === "bn"
-                      ? "আপনার নিবন্ধন তথ্যাবলী:"
-                      : "Your Registration Details:"}
-                  </h3>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600">
-                      <p className="text-xs text-slate-500 dark:text-slate-400 font-bold uppercase mb-1">
-                        {t.fullName}
-                      </p>
-                      <p className="text-lg font-bold text-slate-900 dark:text-white">
-                        {registeredTechnician.fullName}
-                      </p>
-                    </div>
-
-                    <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600">
-                      <p className="text-xs text-slate-500 dark:text-slate-400 font-bold uppercase mb-1">
-                        {t.phoneNumber}
-                      </p>
-                      <a
-                        href={`tel:${registeredTechnician.phoneNumber}`}
-                        className="text-lg font-bold text-indigo-600 dark:text-indigo-400 hover:underline"
-                      >
-                        {registeredTechnician.phoneNumber}
-                      </a>
-                    </div>
-
-                    <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600">
-                      <p className="text-xs text-slate-500 dark:text-slate-400 font-bold uppercase mb-1">
-                        {t.membershipDuration}
-                      </p>
-                      <p className="text-sm font-bold text-slate-900 dark:text-white">
-                        {registeredTechnician.membershipDuration === "3_months"
-                          ? t.threeMonths
-                          : registeredTechnician.membershipDuration === "6_months"
-                            ? t.sixMonths
-                            : registeredTechnician.membershipDuration === "2_years"
-                              ? t.twoYears
-                              : t.custom}
-                      </p>
-                    </div>
-
-                    <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600">
-                      <p className="text-xs text-slate-500 dark:text-slate-400 font-bold uppercase mb-1">
-                        {t.registeredAt}
-                      </p>
-                      <p className="text-sm font-bold text-slate-900 dark:text-white">
-                        {registeredTechnician.registeredAt}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Success Message Box */}
-                <div className="p-4 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800/50">
-                  <div className="flex items-start gap-3">
-                    <CheckCircle className="w-5 h-5 text-emerald-600 dark:text-emerald-400 flex-shrink-0 mt-0.5" />
-                    <p className="text-sm text-emerald-900 dark:text-emerald-300 leading-relaxed">
-                      {t.successMessage}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Info Box - Prototype Notice */}
-                <div className="p-4 rounded-xl bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800/50">
-                  <div className="flex items-start gap-3">
-                    <AlertCircle className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
-                    <p className="text-xs text-blue-900 dark:text-blue-300 leading-relaxed">
-                      {language === "bn"
-                        ? "⚠️ প্রোটোটাইপ মোডে: এই ডেটা স্থানীয়ভাবে সংরক্ষিত হয়েছে। ব্যাকএন্ড একীভূত হলে স্থায়ী সংরক্ষণ শুরু হবে।"
-                        : "⚠️ Prototype Mode: This data is stored locally. Permanent storage will begin once backend is integrated."}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Action Buttons */}
-                <div className="flex gap-3">
-                  <button
-                    onClick={() => {
-                      setRegisteredTechnician(null);
-                      onBack();
-                    }}
-                    className="w-full py-3 px-4 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold hover:bg-slate-800 dark:hover:bg-slate-100 transition-colors"
-                  >
-                    {t.backToCustomer}
-                  </button>
-                  <button
-                    onClick={() => setRegisteredTechnician(null)}
-                    className="w-full py-3 px-4 rounded-xl bg-white dark:bg-slate-700 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-600 font-bold hover:bg-slate-50 dark:hover:bg-slate-600 transition-colors"
-                  >
-                    {language === "bn"
-                      ? "আরেকজন নিবন্ধন করুন"
-                      : "Register Another"}
-                  </button>
-                </div>
-              </div>
+              <button 
+                onClick={resetForm}
+                className="px-6 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-sm font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+              >
+                {t.newReg}
+              </button>
             </motion.div>
           ) : (
-            // Registration Form
-            <motion.div
+            <motion.form 
               key="form"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              className="bg-white dark:bg-slate-800 rounded-3xl shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-700"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onSubmit={handleSubmit} 
+              className="p-6 md:p-8 space-y-6"
             >
-              <form onSubmit={handleSubmit} className="p-8 space-y-6">
-                {/* Full Name Input */}
-                <div>
-                  <label className="block text-sm font-bold text-slate-900 dark:text-white mb-2">
-                    {t.fullName}
-                    <span className="text-red-500 ml-1">*</span>
+              <div className="w-full rounded-2xl overflow-hidden mb-6 border border-slate-200 dark:border-slate-700 shadow-sm">
+                <img 
+                  src={serviceDiagram} 
+                  alt="Service Diagram" 
+                  className="w-full h-auto object-cover opacity-90 hover:opacity-100 transition-opacity" 
+                />
+              </div>
+
+              {error && (
+                <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl text-red-600 dark:text-red-400 text-xs font-bold flex items-center gap-2">
+                  <AlertCircle className="w-4 h-4" /> {error}
+                </div>
+              )}
+
+              <div className="space-y-4">
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+                    <User className="w-3.5 h-3.5 text-slate-400" />{t.nameLabel} <span className="text-red-500">*</span>
                   </label>
-                  <input
-                    type="text"
-                    name="fullName"
-                    value={formData.fullName}
-                    onChange={handleInputChange}
-                    placeholder={t.fullNamePlaceholder}
-                    className={`w-full px-4 py-3 rounded-xl border-2 bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 transition-colors focus:outline-none ${
-                      errors.fullName
-                        ? "border-red-500 focus:border-red-600"
-                        : "border-slate-200 dark:border-slate-600 focus:border-indigo-500 dark:focus:border-indigo-400"
-                    }`}
-                  />
-                  {errors.fullName && (
-                    <p className="text-xs text-red-500 mt-1 flex items-center gap-1">
-                      <AlertCircle className="w-3 h-3" /> {errors.fullName}
-                    </p>
-                  )}
+                  <input required type="text" value={name} onChange={e => setName(e.target.value)} className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-amber-500 dark:focus:border-amber-400 transition-colors" />
                 </div>
 
-                {/* Phone Number Input */}
-                <div>
-                  <label className="block text-sm font-bold text-slate-900 dark:text-white mb-2">
-                    {t.phoneNumber}
-                    <span className="text-red-500 ml-1">*</span>
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+                    <Phone className="w-3.5 h-3.5 text-slate-400" />{t.phoneLabel} <span className="text-red-500">*</span>
                   </label>
-                  <input
-                    type="tel"
-                    name="phoneNumber"
-                    value={formData.phoneNumber}
-                    onChange={handleInputChange}
-                    placeholder={t.phoneNumberPlaceholder}
-                    className={`w-full px-4 py-3 rounded-xl border-2 bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 transition-colors focus:outline-none ${
-                      errors.phoneNumber
-                        ? "border-red-500 focus:border-red-600"
-                        : "border-slate-200 dark:border-slate-600 focus:border-indigo-500 dark:focus:border-indigo-400"
-                    }`}
-                  />
-                  {errors.phoneNumber && (
-                    <p className="text-xs text-red-500 mt-1 flex items-center gap-1">
-                      <AlertCircle className="w-3 h-3" /> {errors.phoneNumber}
-                    </p>
-                  )}
+                  <input required type="tel" value={phone} onChange={e => setPhone(e.target.value)} placeholder="01XXXXXXXXX" className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-amber-500 transition-colors" />
                 </div>
 
-                {/* NID Input */}
-                <div>
-                  <label className="block text-sm font-bold text-slate-900 dark:text-white mb-2">
-                    {t.nidNumber}
-                    <span className="text-red-500 ml-1">*</span>
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+                    <IdCard className="w-3.5 h-3.5 text-slate-400" />{t.voterIdLabel} <span className="text-red-500">*</span>
                   </label>
-                  <input
-                    type="text"
-                    name="nidNumber"
-                    value={formData.nidNumber}
-                    onChange={handleInputChange}
-                    placeholder={t.nidPlaceholder}
-                    className={`w-full px-4 py-3 rounded-xl border-2 bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 transition-colors focus:outline-none ${
-                      errors.nidNumber
-                        ? "border-red-500 focus:border-red-600"
-                        : "border-slate-200 dark:border-slate-600 focus:border-indigo-500 dark:focus:border-indigo-400"
-                    }`}
-                  />
-                  {errors.nidNumber && (
-                    <p className="text-xs text-red-500 mt-1 flex items-center gap-1">
-                      <AlertCircle className="w-3 h-3" /> {errors.nidNumber}
-                    </p>
-                  )}
+                  <input required type="text" value={voterId} onChange={e => setVoterId(e.target.value)} className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-amber-500 transition-colors" />
                 </div>
 
-                {/* Membership Duration Dropdown */}
-                <div>
-                  <label className="block text-sm font-bold text-slate-900 dark:text-white mb-2">
-                    {t.membershipDuration}
+                <div className="space-y-2">
+                  <label className="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+                    <Calendar className="w-3.5 h-3.5 text-slate-400" />{t.membershipLabel} <span className="text-red-500">*</span>
                   </label>
-                  <select
-                    name="membershipDuration"
-                    value={formData.membershipDuration}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-400 transition-colors"
-                  >
-                    <option value="3_months">{t.threeMonths}</option>
-                    <option value="6_months">{t.sixMonths}</option>
-                    <option value="2_years">{t.twoYears}</option>
-                    <option value="custom">{t.custom}</option>
-                  </select>
-                </div>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                    {[
+                      { id: "3_months", label: t.opt3m },
+                      { id: "6_months", label: t.opt6m },
+                      { id: "2_years", label: t.opt2y },
+                      { id: "custom", label: t.optCustom }
+                    ].map((opt) => (
+                      <div 
+                        key={opt.id}
+                        onClick={() => setMembership(opt.id)}
+                        className={`cursor-pointer text-center py-2.5 px-2 rounded-xl text-xs font-bold transition-all border ${
+                          membership === opt.id 
+                            ? "bg-amber-100 text-amber-800 border-amber-300 dark:bg-amber-900/30 dark:text-amber-400 dark:border-amber-700 shadow-sm" 
+                            : "bg-slate-50 text-slate-600 border-slate-200 hover:border-amber-200 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-700 dark:hover:border-amber-800/50"
+                        }`}
+                      >
+                        {opt.label}
+                      </div>
+                    ))}
+                  </div>
 
-                {/* Submit Button */}
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-orange-500 to-red-600 text-white font-bold hover:from-orange-600 hover:to-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2 text-base"
-                >
-                  {isSubmitting ? (
-                    <>
-                      <span className="inline-block animate-spin border-2 border-white border-t-transparent rounded-full h-4 w-4"></span>
-                      {language === "bn" ? "প্রক্রিয়াকরণ..." : "Processing..."}
-                    </>
-                  ) : (
-                    <>
-                      <Wrench className="w-5 h-5" />
-                      {t.register}
-                    </>
-                  )}
-                </button>
-              </form>
-            </motion.div>
+                  <AnimatePresence>
+                    {membership === "custom" && (
+                      <motion.div 
+                        initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                        animate={{ opacity: 1, height: "auto", marginTop: 12 }}
+                        exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                        className="overflow-hidden"
+                      >
+                        <input 
+                          type="number" 
+                          min="1"
+                          placeholder={t.customPlaceholder} 
+                          value={customMembership} 
+                          onChange={e => setCustomMembership(e.target.value)} 
+                          className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-amber-500 transition-colors" 
+                        />
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              </div>
+
+              <button 
+                type="submit" 
+                disabled={isSubmitting} 
+                className="w-full py-4 mt-4 rounded-2xl bg-amber-500 hover:bg-amber-600 text-white font-bold flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transition-all disabled:opacity-70 disabled:cursor-not-allowed"
+              >
+                {isSubmitting ? <><Loader2 className="w-5 h-5 animate-spin" /> ...</> : <><User className="w-5 h-5" /> {t.submit}</>}
+              </button>
+            </motion.form>
           )}
         </AnimatePresence>
-      </div>
+      </motion.div>
     </div>
   );
 }

@@ -14,9 +14,11 @@ import { ServiceCategory, Ticket } from "./types";
 import { CheckCircle, ShieldCheck, Sparkles, MapPin, Phone, MessageSquare, BookOpen } from "lucide-react";
 import { useAppContext } from "./context/AppContext";
 import AnimatedBackground from "./components/AnimatedBackground";
+import TechnicianApp from "./components/TechnicianApp";
 export default function App() {
   const { user, isAdmin, language } = useAppContext();
   const [isAdminMode, setIsAdminMode] = useState(false);
+  const [isTechnicianMode, setIsTechnicianMode] = useState(false);
   const [currentCategory, setCurrentCategory] = useState<ServiceCategory | null>(null);
   const [initialSubCategory, setInitialSubCategory] = useState<string>("");
   const [lastSubmittedTicket, setLastSubmittedTicket] = useState<Ticket | null>(null);
@@ -54,13 +56,24 @@ export default function App() {
           if (admin) {
             setCurrentCategory(null);
             setLastSubmittedTicket(null);
+            setIsTechnicianMode(false);
           }
         }} 
       />
 
       <main className="flex-1 w-full" id="main_layout_body">
         <AnimatePresence mode="wait">
-          {isAdminMode && isAdmin ? (
+          {isTechnicianMode ? (
+            <motion.div
+              key="technician"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.3 }}
+            >
+              <TechnicianApp />
+            </motion.div>
+          ) : isAdminMode && isAdmin ? (
             <motion.div
               key="admin"
               initial={{ opacity: 0, x: 20 }}
@@ -95,7 +108,7 @@ export default function App() {
             >
               <HomeView 
                 onSelectCategory={handleSelectCategory} 
-                onEnterAdmin={() => setIsAdminMode(true)}
+                onEnterAdmin={() => { setIsAdminMode(true); setIsTechnicianMode(false); }}
               />
             </motion.div>
           )}
@@ -112,13 +125,17 @@ export default function App() {
               {language === "bn" ? "পাবলিশ ও ইন্সটল গাইড" : "Publishing Guide"}
             </button>
             <span className="hidden sm:inline-block">•</span>
-            <button onClick={() => setIsAdminMode(false)} className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+            <button onClick={() => { setIsAdminMode(false); setIsTechnicianMode(false); setCurrentCategory(null); }} className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
               {language === "bn" ? "কাস্টমার পোর্টাল" : "Customer Portal"}
+            </button>
+            <span className="hidden sm:inline-block">•</span>
+            <button onClick={() => { setIsAdminMode(false); setIsTechnicianMode(true); setCurrentCategory(null); }} className="hover:text-amber-600 dark:hover:text-amber-400 transition-colors">
+              {language === "bn" ? "টেকনিশিয়ান পোর্টাল" : "Technician Portal"}
             </button>
             {isAdmin && (
               <>
                 <span className="hidden sm:inline-block">•</span>
-                <button onClick={() => setIsAdminMode(true)} className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+                <button onClick={() => { setIsAdminMode(true); setIsTechnicianMode(false); }} className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
                   {language === "bn" ? "কোঅর্ডিনেটর" : "Coordinator"}
                 </button>
               </>
