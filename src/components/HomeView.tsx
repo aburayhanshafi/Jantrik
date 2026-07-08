@@ -20,7 +20,11 @@ import ContactFormModal from "./ContactFormModal";
 
 import carBanner from "../assets/car_diagram.jpg";
 import bikeBanner from "../assets/bike_diagram.jpg";
-import buildingBanner from "../assets/ac_diagram.jpg";
+import acBanner from "../assets/ac_diagram.jpg";
+import generatorBanner from "../assets/generator_diagram.jpg";
+import plumberBanner from "../assets/plumber_diagram.jpg";
+import electricianBanner from "../assets/home_appliance_diagram.jpg";
+import otherBanner from "../assets/lift_diagram.jpg";
 
 const HELPLINE = "+8801581881805";
 const WHATSAPP_URL = `https://wa.me/8801581881805`;
@@ -291,53 +295,64 @@ export default function HomeView({ onSelectCategory, onEnterAdmin }: HomeViewPro
               </div>
             </motion.button>
 
-            {/* AC + GENERATOR split */}
-            <div className="h-72 flex flex-col gap-4">
-              <button
-                onClick={() => onSelectCategory(ServiceCategory.BUILDING, "ac")}
-                className="group flex-1 relative overflow-hidden rounded-3xl bg-cyan-600 dark:bg-cyan-800 border border-cyan-500 dark:border-cyan-700 hover:brightness-110 shadow-lg text-left cursor-pointer p-5 flex items-center gap-4 transition-all"
-              >
-                <div className="w-12 h-12 rounded-2xl bg-cyan-500 dark:bg-cyan-700 flex items-center justify-center text-white shadow-inner flex-shrink-0 shadow-cyan-500/50">
+            {/* AC CARD */}
+            <motion.button
+              whileHover={{ y: -5, scale: 1.01 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => onSelectCategory(ServiceCategory.BUILDING, "ac")}
+              className="group relative overflow-hidden rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-cyan-400 dark:hover:border-cyan-500 shadow-xl hover:shadow-2xl transition-all h-72 text-left cursor-pointer"
+            >
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/40 to-transparent z-10" />
+              <img src={acBanner} alt="AC Servicing" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+              <div className="absolute bottom-0 left-0 right-0 p-6 z-20">
+                <div className="w-12 h-12 rounded-2xl bg-cyan-600 flex items-center justify-center text-white mb-4 shadow-lg shadow-cyan-500/30">
                   <ThermometerSnowflake className="w-6 h-6" />
                 </div>
-                <div>
-                  <h3 className="text-lg font-bold text-white">{bn ? "এসি / ফ্রিজ সার্ভিসিং" : "AC / Fridge Servicing"}</h3>
-                  <p className="text-cyan-100 text-[10px] mt-0.5">
-                    {bn ? "গ্যাস রিফিল, কম্প্রেসর মেরামত, ক্লিনিং — সব করা হয়।" : "Gas refill, compressor repair, deep cleaning."}
-                  </p>
-                </div>
-              </button>
+                <h3 className="text-2xl font-bold text-white mb-1">{bn ? "এসি / ফ্রিজ সার্ভিসিং" : "AC / Fridge Servicing"}</h3>
+                <p className="text-cyan-100 text-sm opacity-90 line-clamp-2">
+                  {bn ? "গ্যাস রিফিল, কম্প্রেসর মেরামত, ক্লিনিং — সব করা হয়।" : "Gas refill, compressor repair, deep cleaning."}
+                </p>
+              </div>
+            </motion.button>
 
-              <button
-                onClick={() => onSelectCategory(ServiceCategory.BUILDING, "generator")}
-                className="group flex-1 relative overflow-hidden rounded-3xl bg-slate-800 dark:bg-slate-900 border border-slate-700 hover:bg-slate-700 dark:hover:bg-slate-800 shadow-lg text-left cursor-pointer p-5 flex items-center gap-4 transition-all"
-              >
-                <div className="w-12 h-12 rounded-2xl bg-rose-500 flex items-center justify-center text-white shadow-inner flex-shrink-0 shadow-rose-500/30">
+            {/* GENERATOR CARD */}
+            <motion.button
+              whileHover={{ y: -5, scale: 1.01 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => onSelectCategory(ServiceCategory.BUILDING, "generator")}
+              className="group relative overflow-hidden rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-rose-400 dark:hover:border-rose-500 shadow-xl hover:shadow-2xl transition-all h-72 text-left cursor-pointer"
+            >
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/40 to-transparent z-10" />
+              <img src={generatorBanner} alt="Generator Repair" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+              <div className="absolute bottom-0 left-0 right-0 p-6 z-20">
+                <div className="w-12 h-12 rounded-2xl bg-rose-600 flex items-center justify-center text-white mb-4 shadow-lg shadow-rose-500/30">
                   <Zap className="w-6 h-6" />
                 </div>
-                <div>
-                  <h3 className="text-lg font-bold text-white">{bn ? "জেনারেটর মেরামত" : "Generator Repair"}</h3>
-                  <p className="text-slate-300 text-[10px] mt-0.5">
-                    {bn ? "লোডশেডিংয়ে জেনারেটর চালু না হলে কল করুন।" : "Generator won't start during power cuts? Call us."}
-                  </p>
-                </div>
-              </button>
-            </div>
+                <h3 className="text-2xl font-bold text-white mb-1">{bn ? "জেনারেটর মেরামত" : "Generator Repair"}</h3>
+                <p className="text-rose-100 text-sm opacity-90 line-clamp-2">
+                  {bn ? "লোডশেডিংয়ে জেনারেটর চালু না হলে কল করুন।" : "Generator won't start during power cuts? Call us."}
+                </p>
+              </div>
+            </motion.button>
 
             {/* ELECTRICIAN CARD */}
             <motion.button
               whileHover={{ y: -5, scale: 1.01 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => setContactOpen(true)}
-              className="group relative overflow-hidden rounded-3xl bg-gradient-to-br from-violet-600 to-purple-800 border border-violet-500/50 shadow-xl hover:shadow-2xl transition-all h-56 md:h-auto text-left cursor-pointer p-6 flex flex-col justify-end"
+              className="group relative overflow-hidden rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-violet-400 dark:hover:border-violet-500 shadow-xl hover:shadow-2xl transition-all h-72 text-left cursor-pointer"
             >
-              <div className="w-12 h-12 rounded-2xl bg-violet-500/30 flex items-center justify-center text-white mb-4 backdrop-blur-sm border border-violet-400/30">
-                <Plug className="w-6 h-6" />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/40 to-transparent z-10" />
+              <img src={electricianBanner} alt="Electrician Service" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+              <div className="absolute bottom-0 left-0 right-0 p-6 z-20">
+                <div className="w-12 h-12 rounded-2xl bg-violet-600 flex items-center justify-center text-white mb-4 shadow-lg shadow-violet-500/30">
+                  <Plug className="w-6 h-6" />
+                </div>
+                <h3 className="text-2xl font-bold text-white mb-1">{bn ? "ইলেকট্রিশিয়ান" : "Electrician"}</h3>
+                <p className="text-violet-100 text-sm opacity-90 line-clamp-2">
+                  {bn ? "ওয়্যারিং, সুইচবোর্ড, ফ্যান-লাইট ফিটিং — ঘরের সব ইলেকট্রিক্যাল সমস্যায়।" : "Wiring, switchboards, fan-light fitting — all home electrical issues."}
+                </p>
               </div>
-              <h3 className="text-xl font-bold text-white mb-1">{bn ? "ইলেকট্রিশিয়ান" : "Electrician"}</h3>
-              <p className="text-violet-200 text-xs opacity-90 line-clamp-2">
-                {bn ? "ওয়্যারিং, সুইচবোর্ড, ফ্যান-লাইট ফিটিং — ঘরের সব ইলেকট্রিক্যাল সমস্যায়।" : "Wiring, switchboards, fan-light fitting — all home electrical issues."}
-              </p>
             </motion.button>
 
             {/* PLUMBING CARD */}
@@ -345,15 +360,19 @@ export default function HomeView({ onSelectCategory, onEnterAdmin }: HomeViewPro
               whileHover={{ y: -5, scale: 1.01 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => setContactOpen(true)}
-              className="group relative overflow-hidden rounded-3xl bg-gradient-to-br from-teal-600 to-emerald-800 border border-teal-500/50 shadow-xl hover:shadow-2xl transition-all h-56 md:h-auto text-left cursor-pointer p-6 flex flex-col justify-end"
+              className="group relative overflow-hidden rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-teal-400 dark:hover:border-teal-500 shadow-xl hover:shadow-2xl transition-all h-72 text-left cursor-pointer"
             >
-              <div className="w-12 h-12 rounded-2xl bg-teal-500/30 flex items-center justify-center text-white mb-4 backdrop-blur-sm border border-teal-400/30">
-                <Droplets className="w-6 h-6" />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/40 to-transparent z-10" />
+              <img src={plumberBanner} alt="Plumbing Service" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+              <div className="absolute bottom-0 left-0 right-0 p-6 z-20">
+                <div className="w-12 h-12 rounded-2xl bg-teal-600 flex items-center justify-center text-white mb-4 shadow-lg shadow-teal-500/30">
+                  <Droplets className="w-6 h-6" />
+                </div>
+                <h3 className="text-2xl font-bold text-white mb-1">{bn ? "প্লাম্বিং সার্ভিস" : "Plumbing Service"}</h3>
+                <p className="text-teal-100 text-sm opacity-90 line-clamp-2">
+                  {bn ? "পানির লাইন লিক, ট্যাপ-কমোড সমস্যা, পাইপ ফিটিং — দ্রুত সমাধান।" : "Water line leaks, tap & commode issues, pipe fitting — quick solutions."}
+                </p>
               </div>
-              <h3 className="text-xl font-bold text-white mb-1">{bn ? "প্লাম্বিং সার্ভিস" : "Plumbing Service"}</h3>
-              <p className="text-teal-200 text-xs opacity-90 line-clamp-2">
-                {bn ? "পানির লাইন লিক, ট্যাপ-কমোড সমস্যা, পাইপ ফিটিং — দ্রুত সমাধান।" : "Water line leaks, tap & commode issues, pipe fitting — quick solutions."}
-              </p>
             </motion.button>
 
             {/* GENERAL HELP CTA CARD */}
@@ -361,15 +380,23 @@ export default function HomeView({ onSelectCategory, onEnterAdmin }: HomeViewPro
               whileHover={{ y: -5, scale: 1.01 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => setContactOpen(true)}
-              className="group relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-800 to-slate-950 border border-slate-700 shadow-xl hover:shadow-2xl transition-all h-56 md:h-auto text-left cursor-pointer p-6 flex flex-col justify-end"
+              className="group relative md:col-span-2 lg:col-span-3 overflow-hidden rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-indigo-400 dark:hover:border-indigo-500 shadow-xl hover:shadow-2xl transition-all h-48 text-left cursor-pointer"
             >
-              <div className="w-12 h-12 rounded-2xl bg-indigo-500/30 flex items-center justify-center text-white mb-4 backdrop-blur-sm border border-indigo-400/30">
-                <HeartHandshake className="w-6 h-6" />
+              <div className="absolute inset-0 bg-gradient-to-r from-slate-900/95 via-slate-900/70 to-transparent z-10" />
+              <img src={otherBanner} alt="Other Issues" className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700" />
+              <div className="absolute inset-y-0 left-0 p-6 md:p-8 flex items-center z-20 w-full max-w-2xl">
+                <div className="flex gap-6 items-center">
+                  <div className="w-16 h-16 rounded-2xl bg-indigo-600 flex items-center justify-center text-white shadow-lg shadow-indigo-500/30 flex-shrink-0">
+                    <HeartHandshake className="w-8 h-8" />
+                  </div>
+                  <div>
+                    <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">{bn ? "অন্যান্য সমস্যা?" : "Other Issues?"}</h3>
+                    <p className="text-indigo-100 text-sm md:text-base opacity-90">
+                      {bn ? "উপরের ক্যাটাগরিতে আপনার সমস্যা না থাকলে সরাসরি আমাদের জানান।" : "Don't see your problem listed? Contact us directly."}
+                    </p>
+                  </div>
+                </div>
               </div>
-              <h3 className="text-xl font-bold text-white mb-1">{bn ? "অন্যান্য সমস্যা?" : "Other Issues?"}</h3>
-              <p className="text-slate-400 text-xs opacity-90 line-clamp-2">
-                {bn ? "উপরের ক্যাটাগরিতে আপনার সমস্যা না থাকলে সরাসরি আমাদের জানান।" : "Don't see your problem listed? Contact us directly."}
-              </p>
             </motion.button>
 
           </div>
