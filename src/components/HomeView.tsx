@@ -18,9 +18,9 @@ import {
 import { useAppContext } from "../context/AppContext";
 import ContactFormModal from "./ContactFormModal";
 
-import carBanner from "../assets/images/car_service_banner_1781015724259.png";
-import bikeBanner from "../assets/images/bike_service_banner_1781015738289.png";
-import buildingBanner from "../assets/images/building_service_banner_1781015754784.png";
+import carBanner from "../assets/car_diagram.jpg";
+import bikeBanner from "../assets/bike_diagram.jpg";
+import buildingBanner from "../assets/ac_diagram.jpg";
 
 const HELPLINE = "+8801581881805";
 const WHATSAPP_URL = `https://wa.me/8801581881805`;

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { User, Phone, IdCard, Calendar, CheckCircle2, Loader2, Wrench, Sparkles, AlertCircle } from "lucide-react";
 import { useAppContext } from "../context/AppContext";
-import serviceDiagram from "../assets/service_diagram.jpg";
+import serviceDiagram from "../assets/car_diagram.jpg";
 
 export default function TechnicianApp() {
   const { language } = useAppContext();

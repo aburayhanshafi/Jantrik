@@ -13,6 +13,14 @@ import {
 } from "lucide-react";
 import { useAppContext } from "../context/AppContext";
 
+import carDiagram from "../assets/car_diagram.jpg";
+import bikeDiagram from "../assets/bike_diagram.jpg";
+import acDiagram from "../assets/ac_diagram.jpg";
+import electricDiagram from "../assets/generator_diagram.jpg";
+import plumberDiagram from "../assets/plumber_diagram.jpg";
+import applianceDiagram from "../assets/home_appliance_diagram.jpg";
+import liftDiagram from "../assets/lift_diagram.jpg";
+
 interface ServiceFormProps {
   category: ServiceCategory;
   initialSubCategory?: string;
@@ -301,12 +309,30 @@ export default function ServiceForm({ category, initialSubCategory, onBack, onSu
       </button>
 
       <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden">
-        <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-indigo-800 text-white p-6 relative">
-          <Sparkles className="absolute right-6 top-6 opacity-10 w-24 h-24" />
-          <h3 className="text-xl md:text-2xl font-bold font-sans">
-            {category === ServiceCategory.CAR ? t.car : category === ServiceCategory.MOTORCYCLE ? t.bike : t.building}
-          </h3>
-          <p className="text-xs text-blue-100 mt-2">{t.subtitle}</p>
+        
+        {/* Dynamic Category Header Image */}
+        <div className="w-full h-48 md:h-64 overflow-hidden relative bg-slate-900">
+          <img 
+            src={
+              category === ServiceCategory.CAR ? carDiagram :
+              category === ServiceCategory.MOTORCYCLE ? bikeDiagram :
+              category === ServiceCategory.AC ? acDiagram :
+              category === ServiceCategory.ELECTRIC ? electricDiagram :
+              category === ServiceCategory.GENERATOR ? electricDiagram :
+              category === ServiceCategory.PLUMBER ? plumberDiagram :
+              category === ServiceCategory.HOME_APPLIANCE ? applianceDiagram :
+              category === ServiceCategory.LIFT ? liftDiagram :
+              electricDiagram // fallback
+            } 
+            alt="Category Profile Diagram" 
+            className="w-full h-full object-cover opacity-80" 
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex flex-col justify-end p-6 md:p-8">
+            <h3 className="text-2xl md:text-3xl font-extrabold font-sans text-white mb-1">
+              {category === ServiceCategory.CAR ? t.car : category === ServiceCategory.MOTORCYCLE ? t.bike : t.building}
+            </h3>
+            <p className="text-sm text-blue-100 font-medium max-w-lg">{t.subtitle}</p>
+          </div>
         </div>
 
         <form onSubmit={handleSubmit} className="p-6 md:p-8 space-y-6">
