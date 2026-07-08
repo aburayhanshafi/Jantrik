@@ -9,7 +9,7 @@ import { ServiceCategory, Ticket } from "../types";
 import { 
   ArrowLeft, Phone, User, MapPin, Mic, MicOff, 
   Sparkles, CheckCircle2, Loader2, RefreshCw,
-  Camera, Upload, X
+  Camera, Upload, X, Settings, Wind, Paintbrush, Zap, Droplets
 } from "lucide-react";
 import { useAppContext } from "../context/AppContext";
 
@@ -336,6 +336,41 @@ export default function ServiceForm({ category, initialSubCategory, onBack, onSu
         </div>
 
         <form onSubmit={handleSubmit} className="p-6 md:p-8 space-y-6">
+          {category === ServiceCategory.CAR && (
+            <div className="mb-6 space-y-3">
+              <label className="text-sm font-bold text-slate-700 dark:text-slate-300">
+                {language === "bn" ? "সার্ভিস টাইপ নির্বাচন করুন" : "Select Service Type"} <span className="text-rose-500">*</span>
+              </label>
+              <div className="grid grid-cols-3 sm:grid-cols-5 gap-3">
+                {[
+                  { id: "engine", name: "ইঞ্জিন", icon: Settings, color: "text-blue-500", bg: "bg-blue-100 dark:bg-blue-900/30", shadow: "shadow-blue-500/20" },
+                  { id: "ac", name: "এসির কাজ", icon: Wind, color: "text-cyan-500", bg: "bg-cyan-100 dark:bg-cyan-900/30", shadow: "shadow-cyan-500/20" },
+                  { id: "denting", name: "ডেন্টিং পেন্টিং", icon: Paintbrush, color: "text-purple-500", bg: "bg-purple-100 dark:bg-purple-900/30", shadow: "shadow-purple-500/20" },
+                  { id: "electronics", name: "অটো-ইলেকট্রনিক্স", icon: Zap, color: "text-amber-500", bg: "bg-amber-100 dark:bg-amber-900/30", shadow: "shadow-amber-500/20" },
+                  { id: "wash", name: "ওয়াস", icon: Droplets, color: "text-sky-500", bg: "bg-sky-100 dark:bg-sky-900/30", shadow: "shadow-sky-500/20" },
+                ].map((item) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={() => setSubCategory(item.name)}
+                    className={`flex flex-col items-center justify-center p-3 rounded-2xl border-2 transition-all duration-300 relative overflow-hidden ${
+                      subCategory === item.name 
+                        ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20 shadow-lg scale-105' 
+                        : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-indigo-300 hover:shadow-md'
+                    }`}
+                  >
+                    <div className={`p-2.5 rounded-full mb-2 ${item.bg} shadow-lg ${item.shadow}`}>
+                      <item.icon className={`w-6 h-6 ${item.color}`} />
+                    </div>
+                    <span className={`text-[11px] sm:text-xs font-bold text-center leading-tight ${subCategory === item.name ? 'text-indigo-700 dark:text-indigo-300' : 'text-slate-600 dark:text-slate-300'}`}>
+                      {item.name}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-1.5">
               <label className="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1">
